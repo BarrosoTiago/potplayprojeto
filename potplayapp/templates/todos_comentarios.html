@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Comentários Recentes</title>
+    <style>
+        .comment-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'home' %}">← Voltar</a>
+    <h1>Comentários Recentes</h1>
+
+    <hr>
+
+    {% for comentario in comentarios %}
+        <div class="comment-card">
+            <p>
+                <strong>{{ comentario.autor.username }}</strong> comentou em <strong>{{ comentario.jogo.nome }}</strong>
+            </p>
+            <blockquote>
+                "{{ comentario.texto }}"
+            </blockquote>
+            <small>{{ comentario.data_criacao|date:"d/m/Y H:i" }}</small>
+        </div>
+    {% empty %}
+        <p>Ainda não há comentários.</p>
+    {% endfor %}
+
+</body>
+</html>

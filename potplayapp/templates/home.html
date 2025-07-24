@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>PotPlay - Início</title>
+</head>
+<body>
+    <h1>Catálogo de Jogos</h1>
+
+    <p><a href="{% url 'todos_comentarios' %}">Ver todos os comentários recentes</a></p>
+    
+    {% if user.is_authenticated %}
+        <p>Olá, {{ user.username }}! | <a href="{% url 'perfil' %}">Meu Perfil</a> | <a href="{% url 'logout' %}">Sair</a></p>
+    {% else %}
+        <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
+    {% endif %}
+
+    <hr>
+
+    {% for jogo in jogos %}
+        <div class="jogo-card">
+            <h3>{{ jogo.nome }}</h3>
+            <p><strong>Categoria:</strong> {{ jogo.categoria.nome }}</p>
+            <p>{{ jogo.descricao }}</p>
+            
+            <a href="{% url 'adicionar_comentario' jogo.id %}"><button>Adicionar Comentário</button></a>
+        </div>
+    {% empty %}
+        <p>Nenhum jogo cadastrado ainda.</p>
+    {% endfor %}
+</body>
+</html>

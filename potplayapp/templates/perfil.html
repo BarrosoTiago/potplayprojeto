@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil de {{ user.username }}</title>
+</head>
+<body>
+
+    <h2>Perfil do Usuário</h2>
+    <p><strong>Nome de Usuário:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Você é do grupo de:</strong> {{ user.groups.first.name }}</p>
+    
+    <hr>
+
+    <h3>Meus Jogos Criados</h3>
+    {% if jogos_criados %}
+        <ul>
+            {% for jogo in jogos_criados %}
+                <li>{{ jogo.nome }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Você ainda não adicionou nenhum jogo.</p>
+    {% endif %}
+
+    <br>
+    <a href="{% url 'adicionar_jogo' %}"><button>+ Adicionar Jogo</button></a>
+    <a href="{% url 'alterar_perfil' %}"><button>Alterar Perfil</button></a>
+    <a href="{% url 'logout' %}"><button>Sair</button></a>
+    <br><br>
+    <a href="{% url 'home' %}">Voltar para o Catálogo</a>
+
+</body>
+</html>

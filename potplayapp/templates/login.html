@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - PotPlay</title>
+</head>
+<body>
+
+    <h2>Entrar na sua conta</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Entrar</button>
+    </form>
+
+    <br>
+    <p>Não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
+    <p><a href="{% url 'home' %}">Voltar para a página inicial</a></p>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Jogo</title>
+</head>
+<body>
+    <h2>Adicionar Novo Jogo</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Enviar Jogo</button>
+    </form>
+    <br>
+    <a href="{% url 'perfil' %}">Cancelar</a>
+</body>
+</html>

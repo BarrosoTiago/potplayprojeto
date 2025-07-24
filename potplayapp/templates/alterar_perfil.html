@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alterar Perfil</title>
+</head>
+<body>
+    <h2>Alterar Perfil</h2>
+
+    <hr>
+    
+    <h3>Alterar Dados Pessoais</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        <button type="submit" name="update_info">Salvar Alterações</button>
+    </form>
+    
+    <hr style="margin-top: 30px;">
+
+    <h3>Alterar Senha</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ password_form.as_p }}
+        <button type="submit" name="change_password">Alterar Senha</button>
+    </form>
+
+    <br>
+    <a href="{% url 'perfil' %}">Cancelar e Voltar ao Perfil</a>
+</body>
+</html>

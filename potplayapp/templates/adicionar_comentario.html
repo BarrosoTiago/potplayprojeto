@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Comentário</title>
+</head>
+<body>
+    <a href="{% url 'todos_comentarios' %}">← Voltar</a>
+    
+    <h2>Seu comentário sobre "{{ jogo.nome }}"</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Enviar Comentário</button>
+    </form>
+</body>
+</html>

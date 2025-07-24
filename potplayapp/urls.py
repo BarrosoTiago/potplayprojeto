@@ -1,0 +1,27 @@
+# potplayapp/urls.py
+
+from django.urls import path
+from . import views
+from django.contrib.auth import views as auth_views
+
+urlpatterns = [
+    path('', views.home_view, name='home'),
+    # URLs de Autenticação e Usuário
+    path('cadastro/', views.cadastro_view, name='cadastro'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('perfil/', views.perfil_view, name='perfil'),
+    path('perfil/alterar/', views.alterar_perfil_view, name='alterar_perfil'),
+    
+    # URL do CRUD de Jogo (Create)
+    path('adicionar_jogo/', views.adicionar_jogo_view, name='adicionar_jogo'),
+    
+    # URL para a página GERAL de comentários
+    path('comentarios/', views.todos_comentarios_view, name='todos_comentarios'),
+
+    # URL para ADICIONAR um comentário a um JOGO ESPECÍFICO
+    path('jogo/<int:jogo_id>/adicionar_comentario/', views.adicionar_comentario_view, name='adicionar_comentario'),
+
+    # URL para alterar senha
+
+]
