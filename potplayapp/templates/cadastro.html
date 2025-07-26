@@ -1,22 +1,30 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro - PotPlay</title>
+    <!-- <link rel="stylesheet" href="{% static 'potplayapp/css/reset.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'potplayapp/css/cadastro-login.css' %}">
 </head>
 <body>
-
-    <h2>Crie sua conta</h2>
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Cadastrar</button>
-    </form>
-
-    <br>
-    <p>Já tem uma conta? <a href="{% url 'login' %}">Faça o login</a></p>
-    <p><a href="{% url 'home' %}">Voltar para a página inicial</a></p>
+    <div class="main-box">
+        <p>Jogos para se divertir enquanto aprende!</p>
+        <h1>POTPLAY</h1>
+        <form class="form" id="form-registro" method="post">
+            <h2 class="titulo-form">Crie sua conta agora!</h2>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="submit-botao" type="submit">Cadastrar</button>
+        </form>
+        <br>
+        <p>Já tem uma conta? <a href="{% url 'login' %}">Faça o login</a></p>
+    </div>
+    <div>
+        <p><a href="{% url 'home' %}">Voltar para a página inicial</a></p>
+        <img class="logo-fundo" src="{% static 'potplayapp/imgs/logo.png' %}" alt="">
+    </div>
 
 </body>
 </html>
