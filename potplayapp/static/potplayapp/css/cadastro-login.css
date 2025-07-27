@@ -1,7 +1,6 @@
 body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    background-color: #120730;
     color: white
 }
 
@@ -22,13 +21,6 @@ body {
     background-color: #D9D9D9;
     color: #120730;
     padding: 10px;
-}
-
-.submit-botao {
-    background-color: #0A2671;
-    color: white;
-    width: 100%;
-    padding: 5px;
 }
 
 .logo-fundo {

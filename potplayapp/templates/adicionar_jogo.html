@@ -1,18 +1,30 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Adicionar Jogo</title>
+    <link rel="stylesheet" href="{% static 'potplayapp/css/adicionar_jogo.css' %}">
+    <link rel="stylesheet" href="{% static 'potplayapp/css/global.css' %}">
 </head>
 <body>
-    <h2>Adicionar Novo Jogo</h2>
-    
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Enviar Jogo</button>
-    </form>
-    <br>
-    <a href="{% url 'perfil' %}">Cancelar</a>
+    <div class="main-box">
+        
+        <form method="post" enctype="multipart/form-data">
+            <h2>Adicionar Novo Jogo</h2>
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div id="caixa-botoes">
+                <button class="submit-botao" type="submit">Enviar Jogo</button>
+                <br>
+                <a href="{% url 'perfil' %}">Cancelar</a>
+            </div>
+        </form>
+
+
+    </div>
+
 </body>
 </html>
