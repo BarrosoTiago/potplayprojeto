@@ -24,6 +24,7 @@ body {
 }
 
 .logo-fundo {
-    grid-column: 2;
     position: absoltue;
+    width: 100%;
+    right: 0;
 }

@@ -4,13 +4,18 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro - PotPlay</title>
+    <!-- importa fonte -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <!-- <link rel="stylesheet" href="{% static 'potplayapp/css/reset.css' %}"> -->
     <link rel="stylesheet" href="{% static 'potplayapp/css/cadastro-login.css' %}">
     <link rel="stylesheet" href="{% static 'potplayapp/css/global.css' %}">
+    <title>Cadastro - PotPlay</title>
 </head>
 <body>
     <div class="main-box">
+        <p><a href="{% url 'home' %}">Voltar para a página inicial</a></p>
         <p>Jogos para se divertir enquanto aprende!</p>
         <h1>POTPLAY</h1>
         <form class="form" id="form-registro" method="post">
@@ -23,7 +28,6 @@
         <p>Já tem uma conta? <a href="{% url 'login' %}">Faça o login</a></p>
     </div>
     <div>
-        <p><a href="{% url 'home' %}">Voltar para a página inicial</a></p>
         <img class="logo-fundo" src="{% static 'potplayapp/imgs/logo.png' %}" alt="">
     </div>
 
