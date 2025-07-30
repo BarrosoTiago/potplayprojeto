@@ -1,0 +1,45 @@
+<!-- potplayapp/templates/avaliar_jogo.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliar Jogo - Potplay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'potplayapp/css/avaliar_jogo.css' %}">
+</head>
+<body>
+    <div class="container mt-5 p-4 rounded" style="background-color: #0B0225;">
+        <h2 class="mb-4">Avaliar Jogo: {{ jogo.nome }}</h2>
+        
+        <div class="mb-3">
+            <p><strong>Desenvolvedor:</strong> {{ jogo.desenvolvedor.username }}</p>
+            <p><strong>Descrição:</strong> {{ jogo.descricao }}</p>
+        </div>
+        <hr>
+
+        <h4 class="mb-3">Deixe seu feedback e sua decisão</h4>
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group mb-3">
+                <label for="{{ form.feedback.id_for_label }}" class="form-label">Feedback Detalhado:</label>
+                <!-- Renderizando o campo do formulário com a classe do Bootstrap -->
+                {{ form.feedback.as_widget.attrs.class }}
+                <textarea name="{{ form.feedback.name }}" id="{{ form.feedback.id_for_label }}" class="form-control" rows="4"></textarea>
+            </div>
+
+            <div class="mt-4">
+                <!-- Botões que definem a ação -->
+                <button type="submit" name="aprovar" class="btn btn-success">Aprovar Jogo</button>
+                <button type="submit" name="rejeitar" class="btn btn-danger">Rejeitar Jogo</button>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Script do Bootstrap (opcional, para funcionalidades JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

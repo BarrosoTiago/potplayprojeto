@@ -1,0 +1,21 @@
+.card {
+            background-color: #120730;
+            border: 1px solid #260A74;
+            transition: transform 0.2s;
+}
+
+.card:hover {
+            transform: scale(1.05);
+}
+
+.card-title {
+            color: #FFFFFF;
+}
+
+.card-text {
+            color: #ccc;
+}
+
+.status-badge {
+            font-size: 0.8rem;
+}

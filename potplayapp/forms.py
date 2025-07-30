@@ -2,7 +2,7 @@
 # potplayapp/forms.py
 
 from django.contrib.auth.models import User
-from .models import Comentario
+from .models import Comentario, Avaliacao
 from django import forms
 from .models import Jogo
 # from django.contrib.auth.models import User 
@@ -41,3 +41,13 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         fields = UserCreationForm.Meta.fields + ('email',)
+
+
+# NOVO FORMULÁRIO: Formulário para a avaliação de um jogo
+class AvaliacaoForm(forms.ModelForm):
+    class Meta:
+        model = Avaliacao
+        fields = ['feedback'] # O avaliador só precisa preencher o feedback.
+        widgets = {
+            'feedback': forms.Textarea(attrs={'rows': 4}),
+        }

@@ -11,28 +11,57 @@
     <title>PotPlay - Início</title>
 </head>
 <body>
-    <h1>Catálogo de Jogos</h1>
 
-    <p><a href="{% url 'todos_comentarios' %}">Ver todos os comentários recentes</a></p>
-    
-    {% if user.is_authenticated %}
-        <p>Olá, {{ user.username }}! | <a href="{% url 'perfil' %}">Meu Perfil</a> | <a href="{% url 'logout' %}">Sair</a></p>
-    {% else %}
-        <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
-    {% endif %}
-
-    <hr>
-
-    {% for jogo in jogos %}
-        <div class="jogo-card">
-            <h3>{{ jogo.nome }}</h3>
-            <p><strong>Categoria:</strong> {{ jogo.categoria.nome }}</p>
-            <p>{{ jogo.descricao }}</p>
-            
-            <a href="{% url 'adicionar_comentario' jogo.id %}"><button>Adicionar Comentário</button></a>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Catálogo de Jogos</h1>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'perfil' %}" class="btn btn-primary">Meu Perfil</a>
+                    <a href="{% url 'logout' %}" class="btn btn-secondary">Sair</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                    <a href="{% url 'cadastro' %}" class="btn btn-info">Cadastre-se</a>
+                {% endif %}
+            </div>
         </div>
-    {% empty %}
-        <p>Nenhum jogo cadastrado ainda.</p>
-    {% endfor %}
+
+        <div class="row">
+            {% for jogo in jogos %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ jogo.nome }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">por {{ jogo.desenvolvedor.username }}</h6>
+                        <p class="card-text">{{ jogo.descricao|truncatewords:20 }}</p>
+                        
+                        <!-- Mostra o status do jogo -->
+                        <p>
+                            Status: 
+                            {% if jogo.status_avaliacao == 'Aprovado' %}
+                                <span class="badge bg-success status-badge">Aprovado</span>
+                            {% elif jogo.status_avaliacao == 'Rejeitado' %}
+                                <span class="badge bg-danger status-badge">Rejeitado</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark status-badge">Pendente</span>
+                            {% endif %}
+                        </p>
+
+                        <!-- LÓGICA PARA MOSTRAR O BOTÃO DE AVALIAÇÃO -->
+                        {% if is_avaliador and jogo.status_avaliacao == 'Pendente' %}
+                            <a href="{% url 'avaliar_jogo' jogo.id %}" class="btn btn-warning mt-2">Avaliar Jogo</a>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col">
+                <p>Nenhum jogo encontrado.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
 </body>
 </html>

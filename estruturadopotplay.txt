@@ -1,0 +1,6 @@
+Listagem de caminhos de pasta para o volume Dados
+O número de série do volume é 26CA-85A9
+F:\PERFISUSUÁRIO\20241198060009\POTPLAY\-F
+Caminho inválido - \PERFISUSUÁRIO\20241198060009\POTPLAY\-F
+Não existem subpastas 
+

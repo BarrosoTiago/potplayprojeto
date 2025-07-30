@@ -1,0 +1,19 @@
+        /* Estilos personalizados para se parecer com seu protótipo */
+        body {
+            background-color: #0A031D; /* Cor de fundo escura da sua paleta */
+            color: #FFFFFF; /* Texto branco */
+        }
+        .container {
+            max-width: 800px;
+        }
+        .form-control {
+            background-color: #120730;
+            color: #FFFFFF;
+            border: 1px solid #260A74;
+        }
+        .form-control:focus {
+            background-color: #18044F;
+            color: #FFFFFF;
+            border-color: #4D0470;
+            box-shadow: none;
+        }

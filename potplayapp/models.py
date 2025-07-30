@@ -12,6 +12,13 @@ class Categoria(models.Model):
 
 # Tabela 3: Jogo
 class Jogo(models.Model):
+    # Definindo as opções para o status da avaliação
+    STATUS_AVALIACAO = [
+        ('Pendente', 'Pendente'),
+        ('Aprovado', 'Aprovado'),
+        ('Rejeitado', 'Rejeitado'),
+    ]
+
     # Relacionamento com a tabela User (1-N): um usuário pode ter vários jogos.
     desenvolvedor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="jogos_criados")
     
@@ -26,8 +33,29 @@ class Jogo(models.Model):
     
     data_submissao = models.DateTimeField(auto_now_add=True)
 
+    # NOVO CAMPO: Armazena o status da avaliação oficial
+    status_avaliacao = models.CharField(
+        max_length=10,
+        choices=STATUS_AVALIACAO,
+        default='Pendente'
+    )
+
     def __str__(self):
         return f'"{self.nome}" por {self.desenvolvedor.username}'
+
+# NOVO MODELO: Tabela para as avaliações oficiais dos professores/avaliadores
+class Avaliacao(models.Model):
+    jogo = models.ForeignKey(Jogo, on_delete=models.CASCADE, related_name='avaliacoes_oficiais')
+    avaliador = models.ForeignKey(User, on_delete=models.CASCADE)
+    feedback = models.TextField(verbose_name="Feedback da avaliação")
+    data_avaliacao = models.DateTimeField(auto_now_add=True)
+
+    # Garante que um avaliador só pode avaliar um jogo uma vez.
+    class Meta:
+        unique_together = ('jogo', 'avaliador')
+
+    def __str__(self):
+        return f'Avaliação de {self.avaliador.username} para "{self.jogo.nome}"'
     
 
 class Comentario(models.Model):

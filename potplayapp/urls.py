@@ -22,6 +22,8 @@ urlpatterns = [
     # URL para ADICIONAR um comentário a um JOGO ESPECÍFICO
     path('jogo/<int:jogo_id>/adicionar_comentario/', views.adicionar_comentario_view, name='adicionar_comentario'),
 
-    # URL para alterar senha
+    # NOVA URL: Rota para a página de avaliação de um jogo específico
+    path('jogo/<int:jogo_id>/avaliar/', views.avaliar_jogo_view, name='avaliar_jogo'),
 
+    path('jogo/<int:jogo_id>/deletar/', views.deletar_jogo_view, name='deletar_jogo'),
 ]

@@ -8,17 +8,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'potplayapp/css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'potplayapp/css/adicionar_comentario.css' %}">
     <title>Adicionar Comentário</title>
 </head>
 <body>
-    <a href="{% url 'todos_comentarios' %}">← Voltar</a>
+    <a class="voltar" href="{% url 'todos_comentarios' %}">← Voltar</a>
     
-    <h2>Seu comentário sobre "{{ jogo.nome }}"</h2>
+    <h2 class="titulo">Seu comentário sobre "{{ jogo.nome }}"</h2>
 
-    <form method="post">
+    <form method="post" id="comentario">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Enviar Comentário</button>
+        <button class="botao" type="submit">Enviar Comentário</button>
     </form>
 </body>
 </html>
