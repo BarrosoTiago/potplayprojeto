@@ -13,18 +13,94 @@ body {
     align-items: center;
 }
 
+.link {
+    text-decoration: underline;
+}
+
+.slogan {
+    margin-bottom: 5px; /* Reduz drasticamente a margem inferior */
+    font-size: 1rem;
+    color: #d0d0d0; /* Um tom de cinza claro para diferenciar */
+}
+
+.main-box h1 {
+    font-size: 3.5rem; /* Aumenta bastante o tamanho da fonte */
+    margin-top: 5px;
+    margin-bottom: 20px; /* Adiciona um espaço abaixo do título */
+    text-align: center; /* Centraliza o texto */
+    width: 100%; /* Garante que ele use todo o espaço horizontal disponível no container */
+}
+
 .form {
-    margin: 5%;
+    margin: 2%;
+    width: 80%; 
+    max-width: 500px; 
+}
+
+.form input, .form select {
+    width: 100%; 
+    padding: 10px; 
+    font-size: 1rem; 
+    margin-top: 5px; 
+    box-sizing: border-box; 
 }
 
 .titulo-form {
     background-color: #D9D9D9;
     color: #120730;
-    padding: 10px;
+    padding: 15px; /* Aumenta o espaçamento interno */
+    font-size: 1.5rem; /* Aumenta o tamanho da fonte */
+    text-align: center; /* Centraliza o texto */
+    width: 100%; /* Garante que o título ocupe a mesma largura do formulário */
+    box-sizing: border-box; /* Garante que o padding não altere a largura total */
+    margin-bottom: 20px; /* Adiciona um espaço abaixo do título */
 }
 
 .logo-fundo {
     position: absoltue;
     width: 100%;
     right: 0;
+}
+
+/* Estilos para os campos do formulário e mensagens */
+.form-field-wrapper {
+    margin-bottom: 1rem;
+}
+
+.form-field-wrapper label {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* Estilo para a lista de erros do Django */
+.form-field-wrapper ul.errorlist {
+    color: #ff5c5c; /* Cor vermelha para erros */
+    padding: 0;
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9em;
+    list-style-type: none;
+}
+
+/* Estilo para o texto de ajuda do Django */
+.form-field-wrapper .helptext {
+    font-size: 0.8em;
+    color: #cccccc;
+    margin-top: 0.25rem;
+}
+
+/* Estilo para o layout da imagem de fundo */
+.image-container {
+    grid-column: 2;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.image-container img {
+    position: absolute; /* Corrigido de 'absoltue' */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    right: 0;
+    top: 0;
 }

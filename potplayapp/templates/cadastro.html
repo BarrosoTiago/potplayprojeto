@@ -8,27 +8,75 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="{% static 'potplayapp/css/reset.css' %}"> -->
     <link rel="stylesheet" href="{% static 'potplayapp/css/cadastro-login.css' %}">
     <link rel="stylesheet" href="{% static 'potplayapp/css/global.css' %}">
     <title>Cadastro - PotPlay</title>
+    
 </head>
 <body>
     <div class="main-box">
-        <p><a href="{% url 'home' %}">Voltar para a página inicial</a></p>
-        <p>Jogos para se divertir enquanto aprende!</p>
+        <p><a href="{% url 'home' %}" class="link">Voltar para a página inicial</a></p>
+        <p class="slogan">Jogos para se divertir enquanto aprende!</p>
         <h1>POTPLAY</h1>
+        
         <form class="form" id="form-registro" method="post">
-            <h2 class="titulo-form">Crie sua conta agora!</h2>
+            <h2 class="titulo-form">Crie sua Conta Agora!</h2>
             {% csrf_token %}
-            {{ form.as_p }}
+
+            <!-- Só exibe erros gerais se não houver erros nos campos de senha -->
+            {% if form.non_field_errors %}
+                {% if not form.password1.errors and not form.password2.errors %}
+                    <div class="form-field-wrapper">
+                        <ul class="errorlist">
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <!-- Campos do formulário com a lógica condicional -->
+            <div class="form-field-wrapper">
+                <label for="{{ form.username.id_for_label }}">Nome de usuário:</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    {{ form.username.errors }}
+                    <div class="helptext">{{ form.username.help_text }}</div>
+                {% endif %}
+            </div>
+            <div class="form-field-wrapper">
+                <label for="{{ form.password1.id_for_label }}">Senha:</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    {{ form.password1.errors }}
+                    <div class="helptext">{{ form.password1.help_text|linebreaksbr }}</div>
+                {% endif %}
+            </div>
+            <div class="form-field-wrapper">
+                <label for="{{ form.password2.id_for_label }}">Confirme a senha:</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    {{ form.password2.errors }}
+                {% endif %}
+            </div>
+            <div class="form-field-wrapper">
+                <label for="{{ form.tipo_perfil.id_for_label }}">Eu sou um:</label>
+                {{ form.tipo_perfil }}
+                {% if form.tipo_perfil.errors %}
+                    {{ form.tipo_perfil.errors }}
+                {% endif %}
+            </div>
+            
             <button class="submit-botao" type="submit">Cadastrar</button>
         </form>
         <br>
-        <p>Já tem uma conta? <a href="{% url 'login' %}">Faça o login</a></p>
+        <p>Já tem uma conta? <a href="{% url 'login' %}" class="link">Faça Login</a></p>
     </div>
-    <div>
-        <img class="logo-fundo" src="{% static 'potplayapp/imgs/logo.png' %}" alt="">
+    
+    <!-- Container da imagem com a classe corrigida -->
+    <div class="image-container">
+        <img src="{% static 'potplayapp/imgs/logo.png' %}" alt="Logo Potplay">
     </div>
 
 </body>
