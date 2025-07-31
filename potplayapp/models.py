@@ -33,6 +33,8 @@ class Jogo(models.Model):
     
     data_submissao = models.DateTimeField(auto_now_add=True)
 
+    data_atualizacao = models.DateTimeField(auto_now=True) # Atualiza automaticamente a cada edição
+
     # NOVO CAMPO: Armazena o status da avaliação oficial
     status_avaliacao = models.CharField(
         max_length=10,
