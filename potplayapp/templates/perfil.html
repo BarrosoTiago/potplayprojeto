@@ -19,23 +19,16 @@
     
     <hr>
 
-    <h3>Meus Jogos Criados</h3>
-    {% if jogos_criados %}
-        <ul>
-            {% for jogo in jogos_criados %}
-                <li>{{ jogo.nome }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Você ainda não adicionou nenhum jogo.</p>
-    {% endif %}
-
+    <h3 class="mt-5">Meus Jogos Criados</h3>
     <div class="list-group">
         {% for jogo in jogos_criados %}
             <div class="list-group-item d-flex justify-content-between align-items-center">
                 <span>{{ jogo.nome }} - <small class="text-muted">Status: {{ jogo.status_avaliacao }}</small></span>
-                <div>
-                    <!-- BOTÃO DE DELETAR -->
+                <div class="d-flex gap-2">
+                    <!-- BOTÃO DE EDITAR ADICIONADO AQUI -->
+                    <a href="{% url 'editar_jogo' jogo.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    
+                    <!-- Botão de Deletar que já existia -->
                     <a href="{% url 'deletar_jogo' jogo.id %}" class="btn btn-danger btn-sm">Deletar</a>
                 </div>
             </div>

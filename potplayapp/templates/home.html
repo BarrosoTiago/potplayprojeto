@@ -17,6 +17,7 @@
             <h1>Catálogo de Jogos</h1>
             <div>
                 {% if user.is_authenticated %}
+                    <a href="{% url 'todos_comentarios' %}" class="btn btn-info">Feed de Comentários</a>
                     <a href="{% url 'perfil' %}" class="btn btn-primary">Meu Perfil</a>
                     <a href="{% url 'logout' %}" class="btn btn-secondary">Sair</a>
                 {% else %}
@@ -35,7 +36,6 @@
                         <h6 class="card-subtitle mb-2 text-muted">por {{ jogo.desenvolvedor.username }}</h6>
                         <p class="card-text">{{ jogo.descricao|truncatewords:20 }}</p>
                         
-                        <!-- Mostra o status do jogo -->
                         <p>
                             Status: 
                             {% if jogo.status_avaliacao == 'Aprovado' %}
@@ -47,10 +47,23 @@
                             {% endif %}
                         </p>
 
-                        <!-- LÓGICA PARA MOSTRAR O BOTÃO DE AVALIAÇÃO -->
-                        {% if is_avaliador and jogo.status_avaliacao == 'Pendente' %}
-                            <a href="{% url 'avaliar_jogo' jogo.id %}" class="btn btn-warning mt-2">Avaliar Jogo</a>
-                        {% endif %}
+                        <!-- Bloco de botões de ação -->
+                        <div class="d-flex gap-2 mt-2">
+                            <!-- Botão de Avaliar (só para avaliadores e jogos pendentes) -->
+                            {% if is_avaliador and jogo.status_avaliacao == 'Pendente' %}
+                                <a href="{% url 'avaliar_jogo' jogo.id %}" class="btn btn-warning btn-sm">Avaliar</a>
+                            {% endif %}
+
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'adicionar_comentario' jogo.id %}" class="btn btn-light btn-sm">Comentar</a>
+                            {% endif %}
+                            
+                            <!-- BOTÃO DE DELETAR ATUALIZADO -->
+                            <!-- Aparece se o usuário logado for o dono OU um avaliador -->
+                            {% if jogo.desenvolvedor == user or is_avaliador %}
+                                <a href="{% url 'deletar_jogo' jogo.id %}" class="btn btn-danger btn-sm">Deletar</a>
+                            {% endif %}
+                        </div>
                         
                     </div>
                 </div>

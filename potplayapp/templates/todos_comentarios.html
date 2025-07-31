@@ -19,24 +19,37 @@
     </style>
 </head>
 <body>
-    <a href="{% url 'home' %}">← Voltar</a>
-    <h1>Comentários Recentes</h1>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Feed de Comentários</h1>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Voltar para Home</a>
+    </div>
 
-    <hr>
-
-    {% for comentario in comentarios %}
-        <div class="comment-card">
-            <p>
-                <strong>{{ comentario.autor.username }}</strong> comentou em <strong>{{ comentario.jogo.nome }}</strong>
-            </p>
-            <blockquote>
-                "{{ comentario.texto }}"
-            </blockquote>
-            <small>{{ comentario.data_criacao|date:"d/m/Y H:i" }}</small>
-        </div>
-    {% empty %}
-        <p>Ainda não há comentários.</p>
-    {% endfor %}
-
+    <div>
+        {% for comentario in comentarios %}
+            <div class="comment-card">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="mb-1">
+                            <strong>{{ comentario.autor.username }}</strong> comentou em <strong>{{ comentario.jogo.nome }}</strong>:
+                        </p>
+                        <blockquote class="mb-1">"{{ comentario.texto }}"</blockquote>
+                        <small class="text-muted">{{ comentario.data_criacao|date:"d/m/Y à\s H:i" }}</small>
+                    </div>
+                    <div>
+                        <!-- BOTÃO DE DELETAR COMENTÁRIO -->
+                        {% if comentario.autor == user %}
+                            <a href="{% url 'deletar_comentario' comentario.id %}" class="btn btn-outline-danger btn-sm">Deletar</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-info" style="background-color: #07122F; border-color: #04184D; color: #FFFFFF;">
+                Nenhum comentário foi feito na plataforma ainda.
+            </div>
+        {% endfor %}
+    </div>
+</div>
 </body>
 </html>

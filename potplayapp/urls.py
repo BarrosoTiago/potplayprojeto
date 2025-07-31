@@ -26,4 +26,10 @@ urlpatterns = [
     path('jogo/<int:jogo_id>/avaliar/', views.avaliar_jogo_view, name='avaliar_jogo'),
 
     path('jogo/<int:jogo_id>/deletar/', views.deletar_jogo_view, name='deletar_jogo'),
+
+    # NOVA URL: Rota para a página de confirmação de deleção de um comentário
+    path('comentario/<int:comentario_id>/deletar/', views.deletar_comentario_view, name='deletar_comentario'),
+
+    # NOVA URL: Rota para a página de edição de um jogo
+    path('jogo/<int:jogo_id>/editar/', views.editar_jogo_view, name='editar_jogo'),
 ]

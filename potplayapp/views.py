@@ -3,7 +3,7 @@ from django.http import HttpResponseForbidden
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -129,23 +129,28 @@ def adicionar_jogo_view(request):
 
 @login_required
 def deletar_jogo_view(request, jogo_id):
-    # Usamos get_object_or_404 para buscar o jogo ou retornar um erro 404 se não existir
     jogo = get_object_or_404(Jogo, pk=jogo_id)
 
-    # VERIFICAÇÃO DE PERMISSÃO: O usuário logado é o dono do jogo?
-    if jogo.desenvolvedor != request.user:
+    # --- LÓGICA DE PERMISSÃO ATUALIZADA ---
+    # Permite a deleção se o usuário for o dono do jogo OU se pertencer ao grupo 'Avaliadores'.
+    
+    is_dono = jogo.desenvolvedor == request.user
+    is_avaliador = request.user.groups.filter(name='Avaliadores').exists()
+
+    if not (is_dono or is_avaliador):
+        # Se não for nem dono, nem avaliador, nega o acesso.
         return HttpResponseForbidden("Você não tem permissão para deletar este jogo.")
 
     if request.method == 'POST':
-        # Se o formulário de confirmação foi enviado, deleta o jogo
         jogo.delete()
-        # (Opcional) Adicionar uma mensagem de sucesso
-        return redirect('perfil') # Redireciona para o perfil após deletar
+        # (Opcional) Adicionar mensagem de sucesso
+        # Redireciona para a home, pois um avaliador pode ter vindo de lá.
+        return redirect('home') 
 
-    # Se o método for GET, apenas mostra a página de confirmação
     return render(request, 'deletar_jogo_confirmacao.html', {'jogo': jogo})
 
 # View para a página de feed de comentários (Frame 7)
+@login_required 
 def todos_comentarios_view(request):
     # Busca todos os comentários, ordenando pelos mais recentes
     comentarios = Comentario.objects.all().order_by('-data_criacao')
@@ -169,6 +174,24 @@ def adicionar_comentario_view(request, jogo_id):
         form = ComentarioForm()
         
     return render(request, 'adicionar_comentario.html', {'form': form, 'jogo': jogo})
+
+@login_required
+def deletar_comentario_view(request, comentario_id):
+    # Busca o comentário específico ou retorna um erro 404
+    comentario = get_object_or_404(Comentario, pk=comentario_id)
+
+    # VERIFICAÇÃO DE PERMISSÃO: O usuário logado é o autor do comentário?
+    if comentario.autor != request.user:
+        return HttpResponseForbidden("Você não tem permissão para deletar este comentário.")
+
+    if request.method == 'POST':
+        # Se o formulário de confirmação foi enviado, deleta o comentário
+        comentario.delete()
+        # Redireciona de volta para a página de onde o usuário provavelmente veio
+        return redirect('todos_comentarios')
+
+    # Se o método for GET, mostra a página de confirmação
+    return render(request, 'deletar_comentario_confirmacao.html', {'comentario': comentario})
 
 # NOVA VIEW: Página para um avaliador aprovar ou rejeitar um jogo (UPDATE)
 @login_required
@@ -207,3 +230,26 @@ def avaliar_jogo_view(request, jogo_id):
         'form': form
     }
     return render(request, 'avaliar_jogo.html', contexto)
+
+@login_required
+def editar_jogo_view(request, jogo_id):
+    # Busca o jogo a ser editado
+    jogo = get_object_or_404(Jogo, pk=jogo_id)
+
+    # VERIFICAÇÃO DE PERMISSÃO: Apenas o desenvolvedor que criou o jogo pode editá-lo.
+    if jogo.desenvolvedor != request.user:
+        return HttpResponseForbidden("Você não tem permissão para editar este jogo.")
+
+    if request.method == 'POST':
+        # Passamos 'instance=jogo' para que o formulário saiba que está editando um jogo existente.
+        # Também passamos request.FILES para lidar com o upload de um novo arquivo.
+        form = JogoForm(request.POST, request.FILES, instance=jogo)
+        if form.is_valid():
+            form.save()
+            # (Opcional) Adicionar mensagem de sucesso
+            return redirect('perfil')
+    else:
+        # Se não for POST, apenas exibe o formulário preenchido com os dados atuais do jogo.
+        form = JogoForm(instance=jogo)
+
+    return render(request, 'editar_jogo.html', {'form': form, 'jogo': jogo})
