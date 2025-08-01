@@ -25,10 +25,13 @@
         </form>
 
         <br>
-        <p>Não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
-        <p><a href="{% url 'home' %}">Voltar para a página inicial</a></p>
+        <p>Não tem uma conta? <a href="{% url 'cadastro' %}" class="link">Cadastre-se</a></p>
+        <p><a href="{% url 'home' %}" class="link">Voltar para a página inicial</a></p>
     </div>
 
+    <div class="image-container">
+        <img src="{% static 'potplayapp/imgs/logo.png' %}" alt="Logo Potplay">
+    </div>
 
 
 </body>
