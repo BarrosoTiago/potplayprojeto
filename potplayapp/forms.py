@@ -13,7 +13,7 @@ class JogoForm(forms.ModelForm):
         model = Jogo
         # Inclui todos os campos do model, exceto o 'desenvolvedor'
         # que será adicionado automaticamente na view.
-        fields = ['nome', 'descricao', 'categoria', 'arquivo_jogo']
+        fields = ['nome', 'capa', 'descricao', 'categoria', 'arquivo_jogo']
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:

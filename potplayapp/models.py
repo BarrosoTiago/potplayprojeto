@@ -25,6 +25,7 @@ class Jogo(models.Model):
     # Relacionamento com a tabela Categoria (1-N): um jogo pertence a uma categoria.
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=False)
     
+    capa = models.ImageField(upload_to='capas/', null=True, blank=True)
     nome = models.CharField(max_length=255)
     descricao = models.TextField()
     

@@ -9,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Jogo, Comentario, Avaliacao, Categoria
 from .forms import JogoForm, UserUpdateForm, ComentarioForm, CustomUserCreationForm, AvaliacaoForm
-
+from django.http import JsonResponse
 # View para a página inicial (Catálogo de Jogos)
 # View para a página inicial (Catálogo de Jogos)
 def home_view(request):
@@ -253,3 +253,15 @@ def editar_jogo_view(request, jogo_id):
         form = JogoForm(instance=jogo)
 
     return render(request, 'editar_jogo.html', {'form': form, 'jogo': jogo})
+
+# dicionar a view JSON dos comentários
+def comentarios_json_view(request):
+    comentarios = Comentario.objects.select_related('autor').order_by('-data_criacao')[:10]
+    data = [
+        {
+            'autor': c.autor.username if c.autor else 'Anônimo',
+            'texto': c.texto
+        }
+        for c in comentarios
+    ]
+    return JsonResponse(data, safe=False)

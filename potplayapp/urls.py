@@ -3,6 +3,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from .views import comentarios_json_view
 
 urlpatterns = [
     path('', views.home_view, name='home'),
@@ -16,6 +17,10 @@ urlpatterns = [
     # URL do CRUD de Jogo (Create)
     path('adicionar_jogo/', views.adicionar_jogo_view, name='adicionar_jogo'),
     
+    # mostra comentarios na home
+    path('comentarios-json/', comentarios_json_view, name='comentarios_json'),
+
+
     # URL para a página GERAL de comentários
     path('comentarios/', views.todos_comentarios_view, name='todos_comentarios'),
 
