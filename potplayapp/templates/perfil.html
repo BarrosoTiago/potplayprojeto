@@ -4,45 +4,76 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <title>Perfil do Usuário - PotPlay</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'potplayapp/css/global.css' %}">
-    <title>Perfil de {{ user.username }}</title>
+    <link rel="stylesheet" href="{% static 'potplayapp/css/perfil.css' %}">
+    <!-- Link para a biblioteca de ícones Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 <body>
-
-    <h2>Perfil do Usuário</h2>
-    <p><strong>Nome de Usuário:</strong> {{ user.username }}</p>
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Você é do grupo de:</strong> {{ user.groups.first.name }}</p>
-    
-    <hr>
-
-    <h3 class="mt-5">Meus Jogos Criados</h3>
-    <div class="list-group">
-        {% for jogo in jogos_criados %}
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <span>{{ jogo.nome }} - <small class="text-muted">Status: {{ jogo.status_avaliacao }}</small></span>
-                <div class="d-flex gap-2">
-                    <!-- BOTÃO DE EDITAR ADICIONADO AQUI -->
-                    <a href="{% url 'editar_jogo' jogo.id %}" class="btn btn-warning btn-sm">Editar</a>
-                    
-                    <!-- Botão de Deletar que já existia -->
-                    <a href="{% url 'deletar_jogo' jogo.id %}" class="btn btn-danger btn-sm">Deletar</a>
-                </div>
-            </div>
-        {% empty %}
-            <div class="list-group-item">Você ainda não criou nenhum jogo. <a href="{% url 'adicionar_jogo' %}">Crie um agora!</a></div>
-        {% endfor %}
+    <div class="header-perfil">
+        <a href="{% url 'home' %}" class="seta-voltar">&#8592;</a>
+        <h2>PERFIL DO USUÁRIO</h2>
     </div>
 
-    <br>
-    <a href="{% url 'adicionar_jogo' %}"><button>+ Adicionar Jogo</button></a>
-    <a href="{% url 'alterar_perfil' %}"><button>Alterar Perfil</button></a>
-    <a href="{% url 'logout' %}"><button>Sair</button></a>
-    <br><br>
-    <a href="{% url 'home' %}">Voltar para o Catálogo</a>
+    <div class="perfil-wrapper">
+        <!-- COLUNA DA ESQUERDA -->
+        <div class="perfil-bloco">
+            <div class="imagem-perfil">
+                <i class="fas fa-user icon"></i>
+            </div>
 
+            <div class="usuario-info">
+                <p class="nome-usuario">{{ user.username }}</p>
+                <p class="email-usuario">{{ user.email }}</p>
+                <p>Jogos Criados: {{ jogos_criados|length }}</p>
+                <!-- Placeholders para funcionalidades futuras -->
+                <p>Jogos Jogados: 0</p>
+                <p>Conquistas: 0</p>
+            </div>
+
+            <div class="botoes-acao">
+                <a href="{% url 'alterar_perfil' %}" class="botao-acao botao-alterar">
+                    <i class="fas fa-edit"></i> Alterar Informações
+                </a>
+                <!-- Botão para adicionar jogo só aparece para desenvolvedores -->
+                {% if request.user.groups.all.0.name == 'Desenvolvedores' %}
+                <a href="{% url 'adicionar_jogo' %}" class="botao-acao botao-adicionar">
+                    <i class="fas fa-plus-circle"></i> Adicionar Jogo
+                </a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="botao-acao botao-sair">
+                    <i class="fas fa-sign-out-alt"></i> Sair da Conta
+                </a>
+            </div>
+        </div>
+
+        <!-- COLUNA DA DIREITA -->
+        <div class="perfil-jogos">
+            <div class="jogos-bloco">
+                <h3>Meus Jogos Criados</h3>
+                {% for jogo in jogos_criados %}
+                    <div class="jogo-card-lista">
+                        <span>{{ jogo.nome }}</span>
+                        <div class="acoes-jogo">
+                            <a href="{% url 'editar_jogo' jogo.id %}" title="Editar"><i class="fas fa-pen"></i></a>
+                            <a href="{% url 'deletar_jogo' jogo.id %}" title="Deletar"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Você ainda não criou nenhum jogo.</p>
+                {% endfor %}
+            </div>
+
+            <div class="conquistas-bloco">
+                <h3>Minhas Conquistas</h3>
+                <p>Nenhuma conquista atingida no momento.</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
