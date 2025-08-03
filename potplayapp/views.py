@@ -73,7 +73,15 @@ def logout_view(request):
 @login_required
 def perfil_view(request):
     jogos_criados = Jogo.objects.filter(desenvolvedor=request.user)
-    return render(request, 'perfil.html', {'jogos_criados': jogos_criados})
+    
+    # Lógica para verificar se o usuário é um desenvolvedor
+    is_developer = request.user.groups.filter(name='Desenvolvedores').exists()
+    
+    contexto = {
+        'jogos_criados': jogos_criados,
+        'is_developer': is_developer, # Passa a variável para o template
+    }
+    return render(request, 'perfil.html', contexto)
 
 # View para alterar o perfil (UPDATE do CRUD de usuário)
 @login_required
