@@ -1,0 +1,95 @@
+        body {
+            background-color: #0A031D;
+            color: white;
+            /* FONTE ATUALIZADA PARA POPPINS */
+            font-family: 'Poppins', sans-serif;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header-feed {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid #260A74;
+            padding-bottom: 1rem;
+        }
+
+        /* --- ESTILO DO TÍTULO ATUALIZADO AQUI --- */
+        .header-feed h1 {
+            font-family: 'Poppins', sans-serif; /* Usa a fonte padrão do corpo */
+            font-size: 2.2rem; /* Tamanho ajustado */
+            font-weight: 700; /* Negrito para destaque */
+            margin: 0;
+        }
+
+        .btn-voltar {
+            background-color: #120730;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid #260A74;
+            transition: background-color 0.3s;
+        }
+        .btn-voltar:hover {
+            background-color: #18044F;
+        }
+
+        .comment-card {
+            background-color: #120730;
+            border: 1px solid #260A74;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .comment-info strong {
+            color: #FFFFFF; /* Destaque para nomes */
+        }
+        
+        .comment-info .game-name {
+            color: #4D0470; /* Cor roxa para o nome do jogo */
+            font-weight: 600;
+        }
+
+        .comment-body {
+            font-size: 1.1rem;
+            margin: 0.75rem 0;
+            padding-left: 1rem;
+            border-left: 3px solid #4D0470;
+        }
+
+        .comment-meta {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .comment-actions .btn-deletar {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .comment-actions .btn-deletar:hover {
+            color: #ff4d4d;
+        }
+
+        .no-comments-alert {
+            background-color: #120730;
+            border: 1px solid #260A74;
+            color: #ccc;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+        }

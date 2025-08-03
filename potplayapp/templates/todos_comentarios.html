@@ -6,47 +6,42 @@
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <!-- FONTE ATUALIZADA PARA POPPINS -->
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'potplayapp/css/global.css' %}">
-    <title>Comentários Recentes</title>
-    <style>
-        .comment-card {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'potplayapp/css/todos_comentarios.css' %}">
+    <!-- Link para a biblioteca de ícones Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Feed de Comentários - PotPlay</title>
 </head>
 <body>
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container">
+    <div class="header-feed">
         <h1>Feed de Comentários</h1>
-        <a href="{% url 'home' %}" class="btn btn-secondary">Voltar para Home</a>
+        <a href="{% url 'home' %}" class="btn-voltar">Voltar para Home</a>
     </div>
 
     <div>
         {% for comentario in comentarios %}
             <div class="comment-card">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p class="mb-1">
-                            <strong>{{ comentario.autor.username }}</strong> comentou em <strong>{{ comentario.jogo.nome }}</strong>:
-                        </p>
-                        <blockquote class="mb-1">"{{ comentario.texto }}"</blockquote>
-                        <small class="text-muted">{{ comentario.data_criacao|date:"d/m/Y à\s H:i" }}</small>
-                    </div>
-                    <div>
-                        <!-- BOTÃO DE DELETAR COMENTÁRIO -->
-                        {% if comentario.autor == user %}
-                            <a href="{% url 'deletar_comentario' comentario.id %}" class="btn btn-outline-danger btn-sm">Deletar</a>
-                        {% endif %}
-                    </div>
+                <div class="comment-content">
+                    <p class="comment-info">
+                        <strong>{{ comentario.autor.username }}</strong> comentou em <strong class="game-name">{{ comentario.jogo.nome }}</strong>:
+                    </p>
+                    <blockquote class="comment-body">"{{ comentario.texto }}"</blockquote>
+                    <small class="comment-meta">{{ comentario.data_criacao|date:"d/m/Y à\s H:i" }}</small>
+                </div>
+                <div class="comment-actions">
+                    {% if comentario.autor == user %}
+                        <a href="{% url 'deletar_comentario' comentario.id %}" class="btn-deletar" title="Deletar comentário">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% empty %}
-            <div class="alert alert-info" style="background-color: #07122F; border-color: #04184D; color: #FFFFFF;">
-                Nenhum comentário foi feito na plataforma ainda.
+            <div class="no-comments-alert">
+                <p>Nenhum comentário foi feito na plataforma ainda.</p>
             </div>
         {% endfor %}
     </div>
