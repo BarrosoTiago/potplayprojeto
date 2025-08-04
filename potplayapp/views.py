@@ -12,18 +12,25 @@ from .forms import JogoForm, UserUpdateForm, ComentarioForm, CustomUserCreationF
 from django.http import JsonResponse
 # View para a página inicial (Catálogo de Jogos)
 # View para a página inicial (Catálogo de Jogos)
+# potplayapp/views.py
+
 def home_view(request):
     lista_jogos = Jogo.objects.all()
-    
-    # Verifica se o usuário está logado e se pertence ao grupo 'Avaliadores'
     is_avaliador = False
+    favoritos_ids = []
+    jogos_favoritados = [] # Inicializa a lista
+
     if request.user.is_authenticated:
-        if request.user.groups.filter(name='Avaliadores').exists():
-            is_avaliador = True
-            
+        is_avaliador = request.user.groups.filter(name='Avaliadores').exists()
+        user_favorites = request.user.jogos_favoritos.all()
+        favoritos_ids = list(user_favorites.values_list('id', flat=True))
+        jogos_favoritados = user_favorites # Passa os objetos completos
+
     contexto = {
         'jogos': lista_jogos,
-        'is_avaliador': is_avaliador  # Passa a informação para o template
+        'is_avaliador': is_avaliador,
+        'favoritos_ids': favoritos_ids,
+        'jogos_favoritados': jogos_favoritados, # Nova variável de contexto
     }
     return render(request, 'home.html', contexto)
 
@@ -70,16 +77,20 @@ def logout_view(request):
     return redirect('login')
 
 # View para exibir o perfil do usuário (READ do CRUD de usuário)
+
 @login_required
 def perfil_view(request):
-    jogos_criados = Jogo.objects.filter(desenvolvedor=request.user)
-    
-    # Lógica para verificar se o usuário é um desenvolvedor
+    # Busca os jogos do usuário e já carrega todas as avaliações relacionadas
+    # para evitar múltiplas consultas ao banco de dados.
+    jogos_criados = Jogo.objects.filter(
+        desenvolvedor=request.user
+    ).prefetch_related('avaliacoes_oficiais__avaliador')
+
     is_developer = request.user.groups.filter(name='Desenvolvedores').exists()
     
     contexto = {
         'jogos_criados': jogos_criados,
-        'is_developer': is_developer, # Passa a variável para o template
+        'is_developer': is_developer,
     }
     return render(request, 'perfil.html', contexto)
 
@@ -238,6 +249,17 @@ def avaliar_jogo_view(request, jogo_id):
         'form': form
     }
     return render(request, 'avaliar_jogo.html', contexto)
+
+@login_required
+def favoritar_jogo_view(request, jogo_id):
+    jogo = get_object_or_404(Jogo, id=jogo_id)
+    if jogo.favoritos.filter(id=request.user.id).exists():
+        # Se o usuário já favoritou o jogo, remove o favorito
+        jogo.favoritos.remove(request.user)
+    else:
+        # Se não, adiciona o favorito
+        jogo.favoritos.add(request.user)
+    return redirect('home') # Redireciona de volta para a página inicial
 
 @login_required
 def editar_jogo_view(request, jogo_id):

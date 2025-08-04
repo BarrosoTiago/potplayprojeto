@@ -29,6 +29,8 @@ class Jogo(models.Model):
     nome = models.CharField(max_length=255)
     descricao = models.TextField()
     
+    favoritos = models.ManyToManyField(User, related_name='jogos_favoritos', blank=True)
+    
     # Campo para o upload do arquivo do jogo, conforme RF005
     arquivo_jogo = models.FileField(upload_to='arquivos_jogos/')
     

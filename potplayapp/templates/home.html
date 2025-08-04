@@ -9,248 +9,251 @@
     <link rel="stylesheet" href="{% static 'potplayapp/css/home.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        /* Adiciona um cursor de ponteiro para indicar que a área é clicável */
+        .card-clickable-area {
+            cursor: pointer;
+        }
+        
+        /* Estilos para a janela flutuante (Modal) */
+        .modal-content { background-color: #FFFFFF; color: #212529; }
+        .modal-header { border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; }
+        .modal-footer { border-top: 1px solid #dee2e6; }
+        .modal-game-cover { width: 100%; height: 200px; object-fit: cover; border-radius: .5rem; margin-bottom: 1rem; }
+        .modal-body h5 { font-weight: 600; }
+        .modal-body .author { color: #6c757d; margin-top: -5px; margin-bottom: 1rem; }
+        .evaluation-section { background-color: #f8f9fa; padding: 1rem; border-radius: .5rem; margin-top: 1.5rem; }
+        .favorite-btn {
+            font-size: 1.5rem;
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.2s, transform 0.2s;
+            margin-left: 1rem; /* ADICIONADO: Espaço entre o título e a estrela */
+        }
+        .favorite-btn.favorited { color: #ffc107; }
+        .favorite-btn:hover { transform: scale(1.2); }
+        .nav-subitem-empty { padding: 0.5rem 1.5rem; color: #888; font-style: italic; display: block; }
+
+        /* --- CSS PARA O MENU LATERAL --- */
+        .navlateral {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Começa escondido */
+            width: 300px;
+            height: 100%;
+            background-color: #120730;
+            padding-top: 1rem;
+            transition: left 0.3s ease-in-out;
+            z-index: 1050;
+            border-right: 1px solid #260A74;
+            overflow-y: auto; /* Adiciona scroll se o conteúdo for grande */
+        }
+        .navlateral.active {
+            left: 0; /* Mostra o menu ao adicionar a classe 'active' */
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1040;
+        }
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .btn-toggle-menu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1060;
+            background: transparent; /* CORREÇÃO: Fundo transparente */
+            color: white;
+            border: none; /* CORREÇÃO: Remove a borda */
+            border-radius: 5px;
+            width: 45px;
+            height: 45px;
+            transition: opacity 0.3s, background-color 0.2s;
+        }
+        /* Adiciona um fundo sutil ao passar o mouse para feedback visual */
+        .btn-toggle-menu:hover {
+            background: rgba(18, 7, 48, 0.7);
+        }
+        .btn-toggle-menu.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Botão único para abrir/fechar o menu lateral -->
-<button id="toggleMenu" class="btn-toggle-menu">
-    <i id="menuIcon" class="fas fa-bars"></i>
-</button>
-
-<!-- Menu Lateral -->
+<!-- Estrutura de Menus e Cabeçalho -->
+<button id="toggleMenu" class="btn-toggle-menu"><i id="menuIcon" class="fas fa-bars"></i></button>
 <div class="navlateral" id="navLateral">
-  <img src="{% static 'potplayapp/imgs/potplay-logo.png' %}" alt="PotPlay Logo" />
-
-  <a href="/home" class="nav-item">
-    <i class="fas fa-home"></i> Início
-  </a>
-
-  <!-- Catálogo de Jogos SEM submenu -->
-  <!-- Menu Dropdown de Catálogo -->
-<div class="dropdown-nav">
-  <a href="/catalogo" class="nav-item dropdown">
-    <i class="fas fa-th-list"></i> Catálogo de Jogos
-  </a>
-  <div class="dropdown-menu">
-    <a href="/catalogo?categoria=Hardware" class="nav-subitem">Hardware</a>
-    <a href="/catalogo?categoria=Rede de computadores" class="nav-subitem">Rede de computadores</a>
-    <a href="/catalogo?categoria=Analise de Dados" class="nav-subitem">Análise de Dados</a>
-    <a href="/catalogo?categoria=C/C++" class="nav-subitem">C/C++</a>
-    <a href="/catalogo?categoria=Eletrônica" class="nav-subitem">Eletrônica</a>
-    <a href="/catalogo?categoria=Empreendedorismo" class="nav-subitem">Empreendedorismo</a>
-    <a href="/catalogo?categoria=Matemática" class="nav-subitem">Matemática</a>
-    <a href="/catalogo?categoria=Sistemas Operacionais" class="nav-subitem">Sistemas Operacionais</a>
-    <a href="/catalogo?categoria=Estrutura de Dados" class="nav-subitem">Estrutura de Dados</a>
-    <a href="/catalogo?categoria=POO" class="nav-subitem">POO</a>
-    <a href="/catalogo?categoria=Projetos web" class="nav-subitem">Projetos web</a>
-    <a href="/catalogo?categoria=Java" class="nav-subitem">Java</a>
-    <a href="/catalogo?categoria=Javascript" class="nav-subitem">Javascript</a>
-    <a href="/catalogo?categoria=Python" class="nav-subitem">Python</a>
-    <a href="/catalogo?categoria=Django" class="nav-subitem">Django</a>
-    <a href="/catalogo?categoria=Lógica" class="nav-subitem">Lógica</a>
-    <a href="/catalogo?categoria=Desenvolvimento" class="nav-subitem">Desenvolvimento</a>
-    <a href="/catalogo?categoria=Geometria" class="nav-subitem">Geometria</a>
-    <a href="/catalogo?categoria=Estatística" class="nav-subitem">Estatística</a>
-    <a href="/catalogo?categoria=Algoritmos de Ordenação" class="nav-subitem">Algoritmos de Ordenação</a>
-    <a href="/catalogo?categoria=Algoritmos" class="nav-subitem">Algoritmos</a>
-    <a href="/catalogo?categoria=Algoritmos de Busca" class="nav-subitem">Algoritmos de Busca</a>
-    <a href="/catalogo?categoria=Topologia" class="nav-subitem">Topologia</a>
-    <a href="/catalogo?categoria=Dinâmica" class="nav-subitem">Dinâmica</a>
-    <a href="/catalogo?categoria=Eletromagnetismo" class="nav-subitem">Eletromagnetismo</a>
-    <a href="/catalogo?categoria=Astronomia" class="nav-subitem">Astronomia</a>
-    <a href="/catalogo?categoria=Física Moderna" class="nav-subitem">Física Moderna</a>
-    <a href="/catalogo?categoria=Bioquímica" class="nav-subitem">Bioquímica</a>
-    <a href="/catalogo?categoria=Química Ambiental" class="nav-subitem">Química Ambiental</a>
-    <a href="/catalogo?categoria=Inteligência Artificial" class="nav-subitem">Inteligência Artificial</a>
-    <a href="/catalogo?categoria=Aprendizado de Máquina" class="nav-subitem">Aprendizado de Máquina</a>
-    <a href="/catalogo?categoria=Visão Computacional" class="nav-subitem">Visão Computacional</a>
-    <a href="/catalogo?categoria=Segurança da Informação" class="nav-subitem">Segurança da Informação</a>
-  </div>
+    <img src="{% static 'potplayapp/imgs/potplay-logo.png' %}" alt="PotPlay Logo" />
+    <a href="{% url 'home' %}" class="nav-item"><i class="fas fa-home"></i> Início</a>
+    <div class="dropdown-nav">
+        <a href="#" class="nav-item dropdown"><i class="fas fa-th-list"></i> Catálogo</a>
+        <div class="dropdown-menu">
+            <a href="?categoria=Hardware" class="nav-subitem">Hardware</a>
+            <!-- ...outras categorias... -->
+        </div>
+    </div>
+    <div class="dropdown-nav">
+        <a href="#" class="nav-item dropdown"><i class="fas fa-star"></i> Meus Favoritos</a>
+        <div class="dropdown-menu">
+            {% for jogo_fav in jogos_favoritados %}
+                <a href="#" class="nav-subitem" data-bs-toggle="modal" data-bs-target="#detalhesJogoModal-{{ jogo_fav.id }}">
+                    {{ jogo_fav.nome }}
+                </a>
+            {% empty %}
+                <span class="nav-subitem-empty">Nenhum jogo favoritado.</span>
+            {% endfor %}
+        </div>
+    </div>
+    <a href="{% url 'todos_comentarios' %}" class="nav-item"><i class="fas fa-comment-alt"></i> Avaliações</a>
+    <a href="{% url 'perfil' %}" class="nav-item"><i class="fas fa-user"></i> Perfil</a>
+    <a href="#" class="nav-item"><i class="fas fa-question-circle"></i> Ajuda</a>
+    <a href="{% url 'logout' %}" class="nav-item"><i class="fas fa-sign-out-alt"></i> Sair</a>
 </div>
-
-  <a href="/favoritos" class="nav-item">
-    <i class="fas fa-star"></i> Meus Favoritos
-  </a>
-  
-  <a href="/avaliacoes" class="nav-item">
-    <i class="fas fa-comment-alt"></i> Avaliações
-  </a>
-  
-  <a href="/perfil" class="nav-item">
-    <i class="fas fa-user"></i> Perfil
-  </a>
-  
-  <a href="/ajuda" class="nav-item">
-    <i class="fas fa-question-circle"></i> Ajuda
-  </a>
-  
-  <a href="/logout" class="nav-item">
-    <i class="fas fa-sign-out-alt"></i> Sair
-  </a>
-</div>
-
-
-<div class="overlay" id="overlay"></div> <!-- Overlay para escurecer o fundo -->
-
+<div class="overlay" id="overlay"></div>
 <div class="container-fluid" style="height: 100vh;">
     <div class="texto-comentario">
         <div class="imagem-fundo">
             <img src="{% static 'potplayapp/imgs/fundo.png' %}" alt="Imagem de fundo" />
             <div class="texto-sobre-imagem">
-                <form class="barra-pesquisa" action="" method="get">
-                    <input type="text" name="pequisa" placeholder="Pesquisar jogo" />
-                    <i class="fas fa-search"></i>
-                </form>
+                <form class="barra-pesquisa" action="" method="get"><input type="text" name="pesquisa" placeholder="Pesquisar jogo" /><i class="fas fa-search"></i></form>
                 <h1>ESTUDE COM NOSSOS JOGOS INDIE</h1>
             </div>
         </div>
         <div class="menu-user">
             {% if user.is_authenticated %}
-              <button id="botaoComentarios" class="custom-btn">
-                <i class="fas fa-comments"></i> Feed de Comentários
-              </button>
-              
+              <button id="botaoComentarios" class="custom-btn"><i class="fas fa-comments"></i> Feed de Comentários</button>
               <div class="nav-comentarios" id="navComentarios">
                   <img src="{% static 'potplayapp/imgs/potplay-logo.png' %}" alt="PotPlay Logo" />
-
-                <h2>Comentários Recentes</h2>
-                <div id="comentarios-nav">
-                  <p>Carregando comentários...</p>
-                </div>
+                  <h2>Comentários Recentes</h2>
+                  <a href="{% url 'todos_comentarios' %}" class="btn-ver-todos">Ver Todos</a>
+                  <div id="comentarios-nav" data-url="{% url 'comentarios_json' %}"><p>Carregando...</p></div>
               </div>
               <div class="overlay-comentarios" id="overlayComentarios"></div>
-
-              <a href="{% url 'perfil' %}" class="custom-btn">
-                <i class="fas fa-user"></i> Meu Perfil
-              </a>
-              <a href="{% url 'logout' %}" class="custom-btn">
-                <i class="fas fa-sign-out-alt"></i> Sair
-              </a>
+              <a href="{% url 'perfil' %}" class="custom-btn"><i class="fas fa-user"></i> Meu Perfil</a>
+              <a href="{% url 'logout' %}" class="custom-btn"><i class="fas fa-sign-out-alt"></i> Sair</a>
             {% else %}
-              <a href="{% url 'login' %}" class="custom-btn">
-                <i class="fas fa-sign-in-alt"></i> Login
-              </a>
-              <a href="{% url 'cadastro' %}" class="custom-btn">
-                <i class="fas fa-user-plus"></i> Cadastre-se
-              </a>
+              <a href="{% url 'login' %}" class="custom-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+              <a href="{% url 'cadastro' %}" class="custom-btn"><i class="fas fa-user-plus"></i> Cadastre-se</a>
             {% endif %}
         </div>
     </div>
       
-      <div class="card-games">
+    <div class="card-games">
         <h1>Jogos Disponíveis</h1>
+        {% for jogo in jogos %}
+        <div class="jogo-card">
+            <div class="card-clickable-area" data-bs-toggle="modal" data-bs-target="#detalhesJogoModal-{{ jogo.id }}">
+                {% if jogo.capa %}<img src="{{ jogo.capa.url }}" alt="Capa de {{ jogo.nome }}">{% else %}<img src="{% static 'potplayapp/imgs/capa-padrao.png' %}" alt="Sem capa">{% endif %}
+                <h3>{{ jogo.nome }}</h3>
+                <p><strong>Categoria:</strong> {{ jogo.categoria.nome }}</p>
+                <p>{{ jogo.descricao|truncatewords:20 }}</p>
+            </div>
+            <div class="avaliacao-estrelas">
+                {% if jogo.status_avaliacao == 'Aprovado' %}<span class="badge bg-success">✅ Aprovado</span>{% elif jogo.status_avaliacao == 'Rejeitado' %}<span class="badge bg-danger">❌ Rejeitado</span>{% else %}<span class="badge bg-warning text-dark">⏳ Pendente</span>{% endif %}
+            </div>
+            <div class="botoes-jogo">
+                {% if jogo.arquivo_jogo %}<a href="{{ jogo.arquivo_jogo.url }}" class="download" download><i class="fa fa-download"></i> Download</a>{% endif %}
+                <a href="{% url 'adicionar_comentario' jogo.id %}" class="comentar" title="Comentar"><i class="fas fa-comment-dots"></i></a>
+            </div>
+        </div>
 
-    {% for jogo in jogos %}
-    <div class="jogo-card">
-        {% if jogo.capa %}
-        <img src="{{ jogo.capa.url }}" alt="Capa do jogo {{ jogo.nome }}">
-        {% else %}
-        <img src="{% static 'potplayapp/imgs/capa-padrao.png' %}" alt="Sem capa">
-        {% endif %}
-        
-        <h3>{{ jogo.nome }}</h3>
-        <p><strong>Categoria:</strong> {{ jogo.categoria.nome }}</p>
-        <p>{{ jogo.descricao|truncatewords:20 }}</p>
-        
-        <div class="avaliacao-estrelas">
-    {% if jogo.status_avaliacao == 'Aprovado' %}
-        <span class="badge bg-success">✅ Aprovado</span>
-    {% elif jogo.status_avaliacao == 'Rejeitado' %}
-        <span class="badge bg-danger">❌ Rejeitado</span>
-    {% else %}
-        <span class="badge bg-warning text-dark">⏳ Pendente</span>
-    {% endif %}
-</div>
-
-      
-<div class="botoes-jogo">
-    {% if jogo.arquivo_jogo %}
-    <a href="{{ jogo.arquivo_jogo.url }}" class="download" download>
-        <i class="fa fa-download"></i> Download
-    </a>
-    {% endif %}
-    <a href="{% url 'adicionar_comentario' jogo.id %}" class="comentar" title="Adicionar Comentário">
-        <i class="fas fa-comment-dots"></i>
-    </a>
-</div>
-
-
-</div>
-
-
-    <!-- Modal (mantém igual ao seu anterior) -->
-    <div class="modal fade" id="detalhesJogoModal-{{ jogo.id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ jogo.nome }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-    <p><strong>Jogo criado por:</strong> {{ jogo.desenvolvedor.get_full_name|default:jogo.desenvolvedor.username }}</p>
-    <p><strong>Categoria:</strong> {{ jogo.categoria.nome }}</p>
-    
-    <p><strong>Data de criação:</strong> {{ jogo.data_submissao|date:"d/m/Y à\s H:i" }}</p>
-    <p><strong>Última atualização:</strong> {{ jogo.data_atualizacao|date:"d/m/Y à\s H:i" }}</p>
-    
-    <p><strong>Status de Avaliação:</strong>
-        {% if jogo.status_avaliacao == 'Aprovado' %}
-            <span class="badge bg-success">✅ Aprovado</span>
-        {% elif jogo.status_avaliacao == 'Rejeitado' %}
-            <span class="badge bg-danger">❌ Rejeitado</span>
-        {% else %}
-            <span class="badge bg-warning text-dark">⏳ Pendente</span>
-        {% endif %}
-    </p>
-
-    <hr>
-    <h6>Descrição Completa:</h6>
-    <p>{{ jogo.descricao }}</p>
-</div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    {% if user.is_authenticated and jogo.arquivo_jogo %}
-                        <a href="{{ jogo.arquivo_jogo.url }}" class="btn btn-primary" download>Download do Jogo</a>
-                    {% endif %}
+        <!-- JANELA FLUTUANTE (MODAL) ATUALIZADA -->
+        <div class="modal fade" id="detalhesJogoModal-{{ jogo.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ jogo.nome }}</h5>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'favoritar_jogo' jogo.id %}" class="favorite-btn {% if jogo.id in favoritos_ids %}favorited{% endif %}" title="Favoritar Jogo">
+                                <i class="{% if jogo.id in favoritos_ids %}fas fa-star{% else %}far fa-star{% endif %}"></i>
+                            </a>
+                        {% endif %}
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% if jogo.capa %}<img src="{{ jogo.capa.url }}" class="modal-game-cover" alt="Capa de {{ jogo.nome }}">{% endif %}
+                        <h5>{{ jogo.nome }}</h5>
+                        <p class="author">por {{ jogo.desenvolvedor.username }}</p>
+                        <p>{{ jogo.descricao }}</p>
+                        <hr>
+                        <p><strong>Enviado em:</strong> {{ jogo.data_submissao|date:"d/m/Y" }}</p>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="toggleUpdateDate('{{ jogo.id }}')">Ver última atualização</button>
+                        <p id="update-date-{{ jogo.id }}" style="display: none; margin-top: 10px;">
+                            <strong>Atualizado em:</strong> {{ jogo.data_atualizacao|date:"d/m/Y à\s H:i" }}
+                        </p>
+                        {% if is_avaliador and jogo.status_avaliacao == 'Pendente' %}
+                        <div class="evaluation-section">
+                            <h6 class="text-center">Área do Avaliador</h6><hr>
+                            <form action="{% url 'avaliar_jogo' jogo.id %}" method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="feedback-{{ jogo.id }}" class="form-label">Deixar um feedback detalhado:</label>
+                                    <textarea name="feedback" class="form-control" id="feedback-{{ jogo.id }}" rows="3" required></textarea>
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="submit" name="enviar_feedback" class="btn btn-secondary">Enviar Feedback</button>
+                                    <button type="submit" name="aprovar" class="btn btn-success">Aprovar com Feedback</button>
+                                </div>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        {% if user.is_authenticated and jogo.arquivo_jogo %}
+                            <a href="{{ jogo.arquivo_jogo.url }}" class="btn btn-primary" download>Download do Jogo</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col"><p>Nenhum jogo encontrado.</p></div>
+        {% endfor %}
     </div>
-
-    {% empty %}
-    <div class="col">
-        <p>Nenhum jogo encontrado.</p>
-    </div>
-    {% endfor %}
-</div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    function toggleUpdateDate(jogoId) {
+        const dateElement = document.getElementById(`update-date-${jogoId}`);
+        dateElement.style.display = dateElement.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    // Script para os menus laterais
     const toggleMenuBtn = document.getElementById('toggleMenu');
     const navLateral = document.getElementById('navLateral');
     const overlay = document.getElementById('overlay');
-
-    toggleMenuBtn.addEventListener('click', function() {
+    toggleMenuBtn.addEventListener('click', () => {
         navLateral.classList.toggle('active');
         overlay.classList.toggle('active');
-        toggleMenuBtn.classList.toggle('hide'); // Oculta o botão ao abrir
+        toggleMenuBtn.classList.toggle('hide');
     });
-
-    overlay.addEventListener('click', function() {
+    overlay.addEventListener('click', () => {
         navLateral.classList.remove('active');
         overlay.classList.remove('active');
-        toggleMenuBtn.classList.remove('hide'); // Mostra o botão ao fechar
+        toggleMenuBtn.classList.remove('hide');
     });
 
+    // Script para carregar comentários
     function carregarComentariosNav() {
-        fetch("{% url 'comentarios_json' %}")
+        const container = document.getElementById('comentarios-nav');
+        const commentsUrl = container.dataset.url;
+        fetch(commentsUrl)
             .then(response => response.json())
             .then(data => {
-                const container = document.getElementById('comentarios-nav');
                 container.innerHTML = '';
-
                 if (data.length === 0) {
                     container.innerHTML = '<p>Sem comentários.</p>';
                 } else {
@@ -263,30 +266,21 @@
                 }
             })
             .catch(err => {
-                document.getElementById('comentarios-nav').innerHTML = '<p>Erro ao carregar.</p>';
+                container.innerHTML = '<p>Erro ao carregar.</p>';
                 console.error(err);
             });
     }
-
     carregarComentariosNav();
-
-    // Atualiza a cada 30 segundos
     setInterval(carregarComentariosNav, 30000);
 
     const botaoComentarios = document.getElementById('botaoComentarios');
     const navComentarios = document.getElementById('navComentarios');
     const overlayComentarios = document.getElementById('overlayComentarios');
-
-    botaoComentarios.addEventListener('click', function() {
+    botaoComentarios.addEventListener('click', () => {
         const isActive = navComentarios.classList.toggle('active');
-        if (isActive) {
-            overlayComentarios.classList.add('active');
-        } else {
-            overlayComentarios.classList.remove('active');
-        }
+        overlayComentarios.classList.toggle('active', isActive);
     });
-
-    overlayComentarios.addEventListener('click', function() {
+    overlayComentarios.addEventListener('click', () => {
         navComentarios.classList.remove('active');
         overlayComentarios.classList.remove('active');
     });

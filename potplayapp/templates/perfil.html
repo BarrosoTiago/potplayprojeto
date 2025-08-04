@@ -122,13 +122,13 @@
             gap: 2rem;
         }
 
-        .jogos-bloco, .conquistas-bloco {
+        .jogos-bloco, .conquistas-bloco, .feedbacks-bloco { /* Adicionado .feedbacks-bloco */
             background-color: rgba(0, 0, 0, 0.2);
             padding: 1.5rem;
             border-radius: 10px;
         }
 
-        .jogos-bloco h3, .conquistas-bloco h3 {
+        .jogos-bloco h3, .conquistas-bloco h3, .feedbacks-bloco h3 { /* Adicionado .feedbacks-bloco h3 */
             margin-top: 0;
             margin-bottom: 1.5rem;
             border-bottom: 1px solid #260A74;
@@ -154,6 +154,24 @@
         }
         .acoes-jogo a:hover {
             color: white;
+        }
+
+        /* --- NOVOS ESTILOS PARA O FEEDBACK --- */
+        .feedback-item {
+            border-left: 3px solid #4D0470;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .feedback-item .feedback-meta {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 0.25rem;
+        }
+        .feedback-item .feedback-meta strong {
+            color: #fff;
+        }
+        .feedback-item .feedback-texto {
+            margin: 0;
         }
 
     </style>
@@ -185,8 +203,6 @@
                     <i class="fas fa-edit"></i> Alterar Informações
                 </a>
                 
-                <!-- CORREÇÃO APLICADA AQUI -->
-                <!-- Botão para adicionar jogo só aparece para desenvolvedores -->
                 {% if is_developer %}
                 <a href="{% url 'adicionar_jogo' %}" class="botao-acao botao-adicionar">
                     <i class="fas fa-plus-circle"></i> Adicionar Jogo
@@ -213,6 +229,24 @@
                     </div>
                 {% empty %}
                     <p>Você ainda não criou nenhum jogo.</p>
+                {% endfor %}
+            </div>
+
+            <!-- === NOVA SEÇÃO DE FEEDBACKS === -->
+            <div class="feedbacks-bloco">
+                <h3>Feedbacks Recebidos</h3>
+                {% for jogo in jogos_criados %}
+                    {% if jogo.avaliacoes_oficiais.all %}
+                        <h5>Sobre o jogo: {{ jogo.nome }}</h5>
+                        {% for avaliacao in jogo.avaliacoes_oficiais.all %}
+                            <div class="feedback-item">
+                                <p class="feedback-meta">
+                                    Avaliado por <strong>{{ avaliacao.avaliador.username }}</strong> em {{ avaliacao.data_avaliacao|date:"d/m/Y" }}
+                                </p>
+                                <p class="feedback-texto">"{{ avaliacao.feedback }}"</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 {% endfor %}
             </div>
 
